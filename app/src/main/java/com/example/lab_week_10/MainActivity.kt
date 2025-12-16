@@ -15,18 +15,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Inisialisasi ViewModel (AMAN, tanpa lazy dulu)
         viewModel = ViewModelProvider(this)[TotalViewModel::class.java]
 
         val textTotal = findViewById<TextView>(R.id.text_total)
         val buttonIncrement = findViewById<Button>(R.id.button_increment)
 
-        // Set nilai awal
-        textTotal.text = getString(R.string.text_total, viewModel.total)
+        viewModel.total.observe(this) { total ->
+            textTotal.text = getString(R.string.text_total, total)
+        }
 
         buttonIncrement.setOnClickListener {
-            val total = viewModel.incrementTotal()
-            textTotal.text = getString(R.string.text_total, total)
+            viewModel.incrementTotal()
         }
     }
 }
